@@ -1,26 +1,34 @@
 // src/components/Sidebar.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MessageSquare, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageSquare, TrendingUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
 
   const menuItems = [
     { name: 'IA (chat)', path: '/ia', icon: MessageSquare },
     { name: 'Meta Trader', path: '/', icon: TrendingUp }
   ];
 
+  const handleLinkClick = () => {
+    // Close sidebar on mobile when a link is clicked
+    if (window.innerWidth < 1024) { // lg breakpoint
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       <div 
-        className={`fixed left-0 top-0 h-screen bg-black flex flex-col transition-all duration-300 z-40 ${
-          isOpen ? 'w-48' : 'w-0'
-        }`}
-        style={{ overflow: 'hidden' }}
+        className={`lg:w-48 w-64 fixed inset-y-0 left-0 z-40 bg-black flex flex-col transition-transform duration-300 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
       >
-        <div className="flex-1 pt-20">
+        <div className="lg:hidden flex justify-end p-2">
+          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+            <X size={20} />
+          </button>
+        </div>
+        <div className="flex-1 pt-20 lg:pt-20">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -29,6 +37,7 @@ const Sidebar = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={handleLinkClick}
                 className={`flex items-center gap-3 px-4 py-3 mx-3 mb-2 rounded-lg transition-all ${
                   isActive ? 'text-white' : 'text-gray-400 hover:text-white'
                 }`}
@@ -60,7 +69,14 @@ const Sidebar = () => {
         </div>
       </div>
 
-      
+      {!isOpen && (
+        <button 
+          onClick={() => setIsOpen(true)} 
+          className="lg:hidden fixed left-0 top-20 p-2 bg-black/80 text-white rounded-r-lg shadow-lg"
+        >
+          <ChevronRight size={24} />
+        </button>
+      )}
     </>
   );
 };

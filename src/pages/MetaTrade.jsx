@@ -45,7 +45,7 @@ const MetaTrade = () => {
                       boxShadow: '0 0 15px rgba(0, 184, 230, 0.2)'
                     }}
                   >
-                    <TrendingUp size={20} sm:size={24} style={{ color: '#00b8e6' }} />
+                    <TrendingUp size={20} className="sm:size-6" style={{ color: '#00b8e6' }} />
                   </div>
                 </div>
 
@@ -170,28 +170,28 @@ const MetaTrade = () => {
                   </p>
                 </div>
 
-                {/* Buttons */}
-                <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
-                  <button 
-                    className="flex-1 py-2.5 rounded font-medium text-xs transition-all hover:border-opacity-100"
-                    style={{
-                      border: '1px solid rgba(0, 184, 230, 0.4)',
-                      color: '#00b8e6',
-                      background: 'rgba(0, 184, 230, 0.05)'
-                    }}
-                  >
-                    Tester la connexion
-                  </button>
-                  <button 
-                    className="flex-1 text-white py-2.5 rounded font-medium text-xs transition-all hover:opacity-90"
-                    style={{
-                      background: 'linear-gradient(343deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)',
-                      boxShadow: '0 0 15px rgba(0, 115, 182, 0.3)'
-                    }}
-                  >
-                    Connecter
-                  </button>
-                </div>
+               {/* Buttons */}
+<div className="flex gap-2 sm:gap-3">
+  <button 
+    className="flex-1 py-2.5 rounded font-medium text-xs transition-all hover:border-opacity-100"
+    style={{
+      border: '1px solid rgba(0, 184, 230, 0.4)',
+      color: '#00b8e6',
+      background: 'rgba(0, 184, 230, 0.05)'
+    }}
+  >
+    Tester la connexion
+  </button>
+  <button 
+    className="flex-1 text-white py-2.5 rounded font-medium text-xs transition-all hover:opacity-90"
+    style={{
+      background: 'linear-gradient(343deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)',
+      boxShadow: '0 0 15px rgba(0, 115, 182, 0.3)'
+    }}
+  >
+    Connecter
+  </button>
+</div>
               </div>
             </div>
 
@@ -208,7 +208,7 @@ const MetaTrade = () => {
                 }}
               >
                 <div className="flex items-start gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
-                  <Lock size={14} sm:size={16} style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
+                  <Lock size={14} className="sm:size-4" style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
                   <h3 className="text-white font-semibold text-xs">
                     Une fois votre compte MT5 connecté
                   </h3>
@@ -228,7 +228,7 @@ const MetaTrade = () => {
                 }}
               >
                 <div className="flex items-start gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
-                  <Brain size={14} sm:size={16} style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
+                  <Brain size={14} className="sm:size-4" style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
                   <h3 className="text-white font-semibold text-xs">
                     Votre compte est lié à votre IA personnelle
                   </h3>
@@ -248,7 +248,7 @@ const MetaTrade = () => {
                 }}
               >
                 <div className="flex items-start gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
-                  <Zap size={14} sm:size={16} style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
+                  <Zap size={14} className="sm:size-4" style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
                   <h3 className="text-white font-semibold text-xs">
                     L'IA prend des décisions et exécute les trades en direct
                   </h3>
@@ -272,7 +272,7 @@ const MetaTrade = () => {
                 }}
               >
                 <div className="flex items-start gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
-                  <BarChart3 size={14} sm:size={16} style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
+                  <BarChart3 size={14} className="sm:size-4" style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
                   <h3 className="text-white font-semibold text-xs">
                     Suivez et contrôlez tout depuis votre tableau de bord
                   </h3>
@@ -292,7 +292,7 @@ const MetaTrade = () => {
                 }}
               >
                 <div className="flex items-start gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
-                  <Lock size={14} sm:size={16} style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
+                  <Lock size={14} className="sm:size-4" style={{ color: '#00b8e6', marginTop: '2px', flexShrink: 0 }} />
                   <h3 className="text-white font-semibold text-xs">
                     Connexion sécurisée
                   </h3>

@@ -44,7 +44,7 @@ const IA = () => {
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -53,7 +53,7 @@ const IA = () => {
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [inputValue]);
 
@@ -69,7 +69,6 @@ const IA = () => {
       setMessages([...messages, newMessage]);
       setInputValue('');
       
-      // Simulate AI response
       setTimeout(() => {
         const aiResponse = {
           id: messages.length + 2,
@@ -114,98 +113,131 @@ const IA = () => {
   };
 
   return (
-    <div className="flex h-screen bg-black pt-16">
-      {/* Main Chat Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'mr-0' : 'mr-0'}`}>
+    <div className="flex flex-col lg:flex-row h-screen bg-black">
+      {/* Mobile: Dashboard at top | Desktop: Hidden */}
+      <div className="lg:hidden w-full border-b border-gray-800 flex-shrink-0">
+        <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
+          <h3 className="text-white font-semibold text-sm sm:text-base">Dashboard Trading</h3>
+
+          {/* IA Active Card */}
+          <div 
+            className="border rounded-2xl p-4 sm:p-5"
+            style={{
+              borderColor: 'rgba(0, 184, 230, 0.3)',
+              background: 'linear-gradient(135deg, rgba(0, 26, 40, 0.8) 0%, rgba(0, 115, 182, 0.8) 100%)',
+              boxShadow: '0 0 30px rgba(0, 115, 182, 0.2), inset 0 0 20px rgba(0, 115, 182, 00.1)'
+            }}
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+              <span className="text-cyan-400 text-xs font-semibold">IA ACTIVE</span>
+            </div>
+            <h3 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">Décision Actuelle</h3>
+            <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
+              <div className="flex justify-between"><span className="text-gray-300">Paire:</span><span className="text-white font-bold">EUR/USD</span></div>
+              <div className="flex justify-between"><span className="text-gray-300">Action:</span><span className="text-green-400 font-bold">ACHETER</span></div>
+              <div className="flex justify-between"><span className="text-gray-300">Confiance:</span><span className="text-white font-bold">87%</span></div>
+              <div className="mt-3 sm:mt-4">
+                <div className="w-full bg-gray-800 rounded-full h-2.5">
+                  <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full transition-all duration-1000" style={{ width: '87%' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            <div className="border rounded-xl p-3 sm:p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+              <div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center"><TrendingUp size={14} className="text-cyan-400" /></div></div>
+              <p className="text-gray-400 text-xs mb-1">Trades ouverts</p><p className="text-white text-lg sm:text-xl font-bold">3</p>
+            </div>
+            <div className="border rounded-xl p-3 sm:p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+              <div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-green-900/30 flex items-center justify-center"><Activity size={14} className="text-green-400" /></div></div>
+              <p className="text-gray-400 text-xs mb-1">Performance</p><p className="text-green-400 text-lg sm:text-xl font-bold">+2.3%</p>
+            </div>
+            <div className="border rounded-xl p-3 sm:p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+              <div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-purple-900/30 flex items-center justify-center"><Target size={14} className="text-purple-400" /></div></div>
+              <p className="text-gray-400 text-xs mb-1">Succès</p><p className="text-white text-lg sm:text-xl font-bold">78%</p>
+            </div>
+            <div className="border rounded-xl p-3 sm:p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+              <div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-orange-900/30 flex items-center justify-center"><Activity size={14} className="text-orange-400" /></div></div>
+              <p className="text-gray-400 text-xs mb-1">Volatilité</p><p className="text-orange-400 text-lg sm:text-xl font-bold">15%</p>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div>
+            <h4 className="text-gray-400 text-xs font-semibold mb-3 uppercase tracking-wider">Activité Récente</h4>
+            <div className="space-y-3">
+              <div className="border rounded-xl p-3" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+                <div className="flex justify-between items-start mb-2"><div><p className="text-white text-sm font-semibold">EUR/USD</p><p className="text-green-400 text-xs font-medium">ACHETER</p></div><span className="text-gray-500 text-xs">10:32</span></div>
+                <div className="flex justify-between text-xs"><span className="text-gray-400">En cours</span><span className="text-cyan-400 font-medium">+0.8%</span></div>
+              </div>
+              <div className="border rounded-xl p-3" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+                <div className="flex justify-between items-start mb-2"><div><p className="text-white text-sm font-semibold">GBP/USD</p><p className="text-red-400 text-xs font-medium">VENDRE</p></div><span className="text-gray-500 text-xs">09:15</span></div>
+                <div className="flex justify-between text-xs"><span className="text-gray-400">Terminé</span><span className="text-green-400 font-medium">+1.2%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Section */}
+      <div className="flex-1 bg-black flex flex-col">
         {/* Header */}
-        <div className="border-b border-gray-800 px-6 py-4">
+        <div className="border-b border-gray-800 px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-              <h1 className="text-white font-semibold text-lg">Assistant Trading VIDAR</h1>
+              <h1 className="text-white font-semibold text-base sm:text-lg">Assistant Trading VIDAR</h1>
             </div>
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-lg border border-gray-700 text-gray-400 hover:text-white hover:border-cyan-500 transition-all"
+              className="p-2 rounded-lg border border-gray-700 text-gray-400 hover:text-white hover:border-cyan-500 transition-all lg:hidden"
             >
               {isSidebarOpen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
             </button>
           </div>
         </div>
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-5 sm:space-y-6">
           {messages.map((message) => (
-            <div key={message.id} className={`flex gap-4 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
-              {/* Avatar */}
-              <div 
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${
-                  message.type === 'bot' 
-                    ? 'bg-gradient-to-br from-cyan-500 to-blue-600' 
-                    : 'bg-gradient-to-br from-gray-600 to-gray-800'
-                }`}
-              >
+            <div key={message.id} className={`flex gap-3 sm:gap-4 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${
+                message.type === 'bot' ? 'bg-gradient-to-br from-cyan-500 to-blue-600' : 'bg-gradient-to-br from-gray-600 to-gray-800'
+              }`}>
                 {message.type === 'bot' ? 'V' : 'U'}
               </div>
-
-              {/* Message Content */}
-              <div className={`flex-1 max-w-2xl ${message.type === 'user' ? 'text-right' : ''}`}>
-                <div 
-                  className={`rounded-2xl p-5 inline-block ${
-                    message.type === 'bot' 
-                      ? 'bg-gray-900/80 text-gray-200 border border-gray-800' 
-                      : 'bg-gradient-to-br from-blue-900/30 to-cyan-900/20 text-gray-300 border border-blue-800/30'
-                  }`}
-                >
+              <div className={`flex-1 max-w-full sm:max-w-2xl ${message.type === 'user' ? 'text-right' : ''}`}>
+                <div className={`rounded-2xl p-4 sm:p-5 inline-block w-full ${
+                  message.type === 'bot' 
+                    ? 'bg-gray-900/80 text-gray-200 border border-gray-800' 
+                    : 'bg-gradient-to-br from-blue-900/30 to-cyan-900/20 text-gray-300 border border-blue-800/30'
+                }`}>
                   <p className="text-sm whitespace-pre-line leading-relaxed">{message.text}</p>
-                  
-                  {/* Analysis Card */}
                   {message.analysis && (
                     <div className="mt-4 p-4 rounded-xl bg-gray-800/50 border border-gray-700">
                       <div className="flex items-center gap-2 mb-3">
                         <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
                         <span className="text-cyan-400 text-xs font-semibold">RECOMMANDATION IA</span>
                       </div>
-                      
-                      <div className="grid grid-cols-2 gap-3 mb-3">
-                        <div>
-                          <span className="text-gray-400 text-xs">Paire:</span>
-                          <p className="text-white font-semibold text-sm">{message.analysis.pair}</p>
-                        </div>
-                        <div>
-                          <span className="text-gray-400 text-xs">Action:</span>
-                          <p className={`font-semibold text-sm ${
-                            message.analysis.action === 'ACHETER' ? 'text-green-400' : 'text-red-400'
-                          }`}>
-                            {message.analysis.action}
-                          </p>
-                        </div>
-                        <div>
-                          <span className="text-gray-400 text-xs">Entrée:</span>
-                          <p className="text-white font-semibold text-sm">{message.analysis.entry}</p>
-                        </div>
-                        <div>
-                          <span className="text-gray-400 text-xs">Confiance:</span>
-                          <p className="text-white font-semibold text-sm">{message.analysis.confidence}%</p>
-                        </div>
+                      <div className="grid grid-cols-2 gap-3 mb-3 text-xs sm:text-sm">
+                        <div><span className="text-gray-400">Paire:</span><p className="text-white font-semibold">{message.analysis.pair}</p></div>
+                        <div><span className="text-gray-400">Action:</span><p className={`font-semibold ${message.analysis.action === 'ACHETER' ? 'text-green-400' : 'text-red-400'}`}>{message.analysis.action}</p></div>
+                        <div><span className="text-gray-400">Entrée:</span><p className="text-white font-semibold">{message.analysis.entry}</p></div>
+                        <div><span className="text-gray-400">Confiance:</span><p className="text-white font-semibold">{message.analysis.confidence}%</p></div>
                       </div>
-
                       <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-1000 ${
-                            message.analysis.confidence > 80 
-                              ? 'bg-gradient-to-r from-green-500 to-cyan-500' 
-                              : message.analysis.confidence > 60
-                              ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
-                              : 'bg-gradient-to-r from-red-500 to-pink-500'
-                          }`}
-                          style={{ width: `${message.analysis.confidence}%` }}
-                        ></div>
+                        <div className={`h-2 rounded-full transition-all duration-1000 ${
+                          message.analysis.confidence > 80 ? 'bg-gradient-to-r from-green-500 to-cyan-500' :
+                          message.analysis.confidence > 60 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
+                          'bg-gradient-to-r from-red-500 to-pink-500'
+                        }`} style={{ width: `${message.analysis.confidence}%` }}></div>
                       </div>
-
                       <div className="space-y-1">
-                        {message.analysis.details.map((detail, index) => (
-                          <div key={index} className="flex items-center gap-2">
+                        {message.analysis.details.map((detail, i) => (
+                          <div key={i} className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500"></div>
                             <span className="text-gray-300 text-xs">{detail}</span>
                           </div>
@@ -222,243 +254,84 @@ const IA = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="px-6 py-3 border-t border-gray-800">
+        <div className="px-4 sm:px-6 py-3 border-t border-gray-800">
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {quickActions.map((action, index) => (
-              <button
-                key={index}
-                onClick={() => handleQuickAction(action.prompt)}
-                className="px-4 py-2 rounded-full text-xs text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 transition-all whitespace-nowrap flex-shrink-0"
-              >
-                {action.text}
+            {quickActions.map((a, i) => (
+              <button key={i} onClick={() => handleQuickAction(a.prompt)}
+                className="px-3 sm:px-4 py-2 rounded-full text-xs text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 transition-all whitespace-nowrap flex-shrink-0">
+                {a.text}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Input Area */}
+        {/* Input */}
         <div className="p-4 border-t border-gray-800 bg-black/50 backdrop-blur-sm">
           <div className="flex gap-3 items-end">
-            <div className="flex-1 relative">
+            <div className="flex-1">
               <textarea
                 ref={textareaRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Posez une question sur les marchés, les stratégies ou mes analyses..."
+                placeholder="Posez une question..."
                 rows={1}
-                className="w-full bg-gray-900 text-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none transition-all resize-none border border-gray-700 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none'
-                }}
+                className="w-full bg-gray-900 text-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none resize-none border border-gray-700 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', maxHeight: '120px' }}
               />
-              <style jsx>{`
-                textarea::-webkit-scrollbar { display: none; }
-              `}</style>
+              <style jsx>{`textarea::-webkit-scrollbar { display: none; }`}</style>
             </div>
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
               className="p-3 rounded-2xl text-white transition-all hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{
-                background: 'linear-gradient(135deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)',
-                boxShadow: '0 0 20px rgba(0, 115, 182, 0.3)'
-              }}
+              style={{ background: 'linear-gradient(135deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)', boxShadow: '0 0 20px rgba(0, 115, 182, 0.3)' }}
             >
               <Send size={18} />
             </button>
           </div>
-          <p className="text-xs text-gray-600 mt-2 text-center">
-            VIDAR AI peut faire des erreurs. Vérifiez les informations importantes avant de trader.
-          </p>
+          <p className="text-xs text-gray-600 mt-2 text-center">VIDAR AI peut faire des erreurs. Vérifiez avant de trader.</p>
         </div>
       </div>
 
-      {/* Right Sidebar */}
+      {/* Desktop Sidebar */}
       {isSidebarOpen && (
-        <div 
-          className="w-80 bg-black border-l border-gray-800 overflow-y-auto flex-shrink-0 transition-all duration-300"
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-          }}
-        >
-          <style jsx>{`
-            div::-webkit-scrollbar { display: none; }
-          `}</style>
-          
+        <div className="hidden lg:block w-80 bg-black border-l border-gray-800 overflow-y-auto  transition-all duration-300" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
           <div className="p-5 space-y-5">
-            {/* Header */}
             <div className="flex items-center justify-between">
               <h3 className="text-white font-semibold">Dashboard Trading</h3>
-              <button 
-                onClick={() => setIsSidebarOpen(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-all"
-              >
+              <button onClick={() => setIsSidebarOpen(false)} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-all">
                 <X size={16} />
               </button>
             </div>
-
-            {/* IA Active Card */}
-            <div 
-              className="border rounded-2xl p-5"
-              style={{
-                borderColor: 'rgba(0, 184, 230, 0.3)',
-                background: 'linear-gradient(135deg, rgba(0, 26, 40, 0.8) 0%, rgba(0, 115, 182, 0.8) 100%)',
-                boxShadow: '0 0 30px rgba(0, 115, 182, 0.2), inset 0 0 20px rgba(0, 115, 182, 0.1)'
-              }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
-                <span className="text-cyan-400 text-xs font-semibold">IA ACTIVE</span>
-              </div>
-              
+            {/* Same as mobile dashboard, but vertical */}
+            <div className="border rounded-2xl p-5" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'linear-gradient(135deg, rgba(0, 26, 40, 0.8) 0%, rgba(0, 115, 182, 0.8) 100%)', boxShadow: '0 0 30px rgba(0, 115, 182, 0.2), inset 0 0 20px rgba(0, 115, 182, 0.1)' }}>
+              <div className="flex items-center gap-2 mb-3"><div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div><span className="text-cyan-400 text-xs font-semibold">IA ACTIVE</span></div>
               <h3 className="text-white font-bold text-lg mb-4">Décision Actuelle</h3>
-              
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300 text-sm">Paire:</span>
-                  <span className="text-white font-bold text-sm">EUR/USD</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300 text-sm">Action:</span>
-                  <span className="text-green-400 font-bold text-sm">ACHETER</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300 text-sm">Confiance:</span>
-                  <span className="text-white font-bold text-sm">87%</span>
-                </div>
-
-                <div className="mt-4">
-                  <div className="w-full bg-gray-800 rounded-full h-2.5">
-                    <div 
-                      className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full transition-all duration-1000" 
-                      style={{ width: '87%' }}
-                    ></div>
-                  </div>
-                </div>
+                <div className="flex justify-between"><span className="text-gray-300 text-sm">Paire:</span><span className="text-white font-bold text-sm">EUR/USD</span></div>
+                <div className="flex justify-between"><span className="text-gray-300 text-sm">Action:</span><span className="text-green-400 font-bold text-sm">ACHETER</span></div>
+                <div className="flex justify-between"><span className="text-gray-300 text-sm">Confiance:</span><span className="text-white font-bold text-sm">87%</span></div>
+                <div className="mt-4"><div className="w-full bg-gray-800 rounded-full h-2.5"><div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full transition-all duration-1000" style={{ width: '87%' }}></div></div></div>
               </div>
             </div>
-
-            {/* Statistics Grid */}
             <div className="grid grid-cols-2 gap-3">
-              {/* Trades ouverts */}
-              <div 
-                className="border rounded-xl p-4"
-                style={{
-                  borderColor: 'rgba(0, 184, 230, 0.3)',
-                  background: 'rgba(0, 26, 40, 0.5)',
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center">
-                    <TrendingUp size={16} className="text-cyan-400" />
-                  </div>
-                </div>
-                <p className="text-gray-400 text-xs mb-1">Trades ouverts</p>
-                <p className="text-white text-xl font-bold">3</p>
-              </div>
-
-              {/* Performance */}
-              <div 
-                className="border rounded-xl p-4"
-                style={{
-                  borderColor: 'rgba(0, 184, 230, 0.3)',
-                  background: 'rgba(0, 26, 40, 0.5)',
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-green-900/30 flex items-center justify-center">
-                    <Activity size={16} className="text-green-400" />
-                  </div>
-                </div>
-                <p className="text-gray-400 text-xs mb-1">Performance</p>
-                <p className="text-green-400 text-xl font-bold">+2.3%</p>
-              </div>
-
-              {/* Taux de réussite */}
-              <div 
-                className="border rounded-xl p-4"
-                style={{
-                  borderColor: 'rgba(0, 184, 230, 0.3)',
-                  background: 'rgba(0, 26, 40, 0.5)',
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-purple-900/30 flex items-center justify-center">
-                    <Target size={16} className="text-purple-400" />
-                  </div>
-                </div>
-                <p className="text-gray-400 text-xs mb-1">Succès</p>
-                <p className="text-white text-xl font-bold">78%</p>
-              </div>
-
-              {/* Volatilité */}
-              <div 
-                className="border rounded-xl p-4"
-                style={{
-                  borderColor: 'rgba(0, 184, 230, 0.3)',
-                  background: 'rgba(0, 26, 40, 0.5)',
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-orange-900/30 flex items-center justify-center">
-                    <Activity size={16} className="text-orange-400" />
-                  </div>
-                </div>
-                <p className="text-gray-400 text-xs mb-1">Volatilité</p>
-                <p className="text-orange-400 text-xl font-bold">15%</p>
-              </div>
+              <div className="border rounded-xl p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}><div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center"><TrendingUp size={16} className="text-cyan-400" /></div></div><p className="text-gray-400 text-xs mb-1">Trades ouverts</p><p className="text-white text-xl font-bold">3</p></div>
+              <div className="border rounded-xl p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}><div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-green-900/30 flex items-center justify-center"><Activity size={16} className="text-green-400" /></div></div><p className="text-gray-400 text-xs mb-1">Performance</p><p className="text-green-400 text-xl font-bold">+2.3%</p></div>
+              <div className="border rounded-xl p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}><div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-purple-900/30 flex items-center justify-center"><Target size={16} className="text-purple-400" /></div></div><p className="text-gray-400 text-xs mb-1">Succès</p><p className="text-white text-xl font-bold">78%</p></div>
+              <div className="border rounded-xl p-4" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}><div className="flex items-center gap-2 mb-2"><div className="w-8 h-8 rounded-lg bg-orange-900/30 flex items-center justify-center"><Activity size={16} className="text-orange-400" /></div></div><p className="text-gray-400 text-xs mb-1">Volatilité</p><p className="text-orange-400 text-xl font-bold">15%</p></div>
             </div>
-
-            {/* Activité récente */}
             <div>
               <h4 className="text-gray-400 text-xs font-semibold mb-3 uppercase tracking-wider">Activité Récente</h4>
-              
               <div className="space-y-3">
-                {/* EUR/USD */}
-                <div 
-                  className="border rounded-xl p-3"
-                  style={{
-                    borderColor: 'rgba(0, 184, 230, 0.3)',
-                    background: 'rgba(0, 26, 40, 0.5)',
-                  }}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <p className="text-white text-sm font-semibold">EUR/USD</p>
-                      <p className="text-green-400 text-xs font-medium">ACHETER</p>
-                    </div>
-                    <span className="text-gray-500 text-xs">10:32</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-xs">En cours</span>
-                    <span className="text-cyan-400 text-xs font-medium">+0.8%</span>
-                  </div>
+                <div className="border rounded-xl p-3" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+                  <div className="flex justify-between items-start mb-2"><div><p className="text-white text-sm font-semibold">EUR/USD</p><p className="text-green-400 text-xs font-medium">ACHETER</p></div><span className="text-gray-500 text-xs">10:32</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400 text-xs">En cours</span><span className="text-cyan-400 text-xs font-medium">+0.8%</span></div>
                 </div>
-
-                {/* GBP/USD */}
-                <div 
-                  className="border rounded-xl p-3"
-                  style={{
-                    borderColor: 'rgba(0, 184, 230, 0.3)',
-                    background: 'rgba(0, 26, 40, 0.5)',
-                  }}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <p className="text-white text-sm font-semibold">GBP/USD</p>
-                      <p className="text-red-400 text-xs font-medium">VENDRE</p>
-                    </div>
-                    <span className="text-gray-500 text-xs">09:15</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-xs">Terminé</span>
-                    <span className="text-green-400 text-xs font-medium">+1.2%</span>
-                  </div>
+                <div className="border rounded-xl p-3" style={{ borderColor: 'rgba(0, 184, 230, 0.3)', background: 'rgba(0, 26, 40, 0.5)' }}>
+                  <div className="flex justify-between items-start mb-2"><div><p className="text-white text-sm font-semibold">GBP/USD</p><p className="text-red-400 text-xs font-medium">VENDRE</p></div><span className="text-gray-500 text-xs">09:15</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400 text-xs">Terminé</span><span className="text-green-400 text-xs font-medium">+1.2%</span></div>
                 </div>
               </div>
             </div>
