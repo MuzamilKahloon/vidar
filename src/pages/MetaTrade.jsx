@@ -17,7 +17,7 @@ const MetaTrade = () => {
 
   // API Base URL - adjust according to your backend
   // const API_BASE_URL = 'http://localhost:8000';
-  const API_BASE_URL = 'https://8c29472171e7.ngrok-free.app';
+  const API_BASE_URL = 'https://bdc16faaec9b.ngrok-free.app';
   // Load saved connection on component mount
   useEffect(() => {
     const savedConnection = localStorage.getItem('mt5_connection');
