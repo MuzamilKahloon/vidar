@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 // Components
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import Loader from "./components/Loader";
 
 // Pages
 import MetaTrade from "./pages/MetaTrade";
@@ -48,8 +49,11 @@ function LayoutWrapper() {
 }
 
 function App() {
+  const [showLoader, setShowLoader] = useState(true);
+
   return (
     <Router>
+      {showLoader && <Loader onComplete={() => setShowLoader(false)} />}
       <LayoutWrapper />
     </Router>
   );
