@@ -1,13 +1,16 @@
 {
-  "functions": {
-    "api/proxy/[...path].js": {
-      "maxDuration": 30
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "http://31.220.76.227:8001/$1"
     },
-    "api/proxy2/[...path].js": {
-      "maxDuration": 30
+    {
+      "source": "/api2/(.*)",
+      "destination": "http://31.220.76.227:8002/$1"
     },
-    "api/upload/[...path].js": {
-      "maxDuration": 30
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  }
+  ]
 }

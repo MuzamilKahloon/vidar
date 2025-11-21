@@ -15,9 +15,9 @@ const MetaTrade = () => {
   const [tradingResults, setTradingResults] = useState(null);
   const [historicalSignals, setHistoricalSignals] = useState(null);
 
-  // ✅ UPDATED: Use different proxy for second backend
-  const API_BASE_URL ='/api/proxy2';
-
+  // API Base URL - adjust according to your backend
+  // const API_BASE_URL = 'http://localhost:8000';
+  const API_BASE_URL = '/api2';
   // Load saved connection on component mount
   useEffect(() => {
     const savedConnection = localStorage.getItem('mt5_connection');
@@ -29,7 +29,7 @@ const MetaTrade = () => {
     }
   }, []);
 
-  // Test MT5 Connection
+  // Test MT5 Connection - USING EXISTING /run-cycle ENDPOINT
   const handleTestConnection = async () => {
     if (!connectionId || !password || !serverName) {
       setTestResult({ 
@@ -44,6 +44,7 @@ const MetaTrade = () => {
     setTestResult(null);
 
     try {
+      // Save credentials temporarily for testing
       const testCredentials = {
         login: connectionId,
         password: password,
@@ -70,7 +71,7 @@ const MetaTrade = () => {
     }
   };
 
-  // Connect MT5 Account
+  // Connect MT5 Account - SAVE CREDENTIALS LOCALLY
   const handleConnectAccount = async () => {
     if (!connectionId || !password || !serverName || !riskLevel) {
       setConnectionResult({ 
@@ -85,6 +86,7 @@ const MetaTrade = () => {
     setConnectionResult(null);
 
     try {
+      // Save connection details to localStorage
       const connectionData = {
         login: connectionId,
         server: serverName,
@@ -95,6 +97,7 @@ const MetaTrade = () => {
       
       localStorage.setItem('mt5_connection', JSON.stringify(connectionData));
 
+      // Update environment configuration
       const mt5Config = {
         MT5_LOGIN: connectionId,
         MT5_SERVER: serverName,
@@ -115,6 +118,7 @@ const MetaTrade = () => {
         }
       });
 
+      // Clear password for security
       setPassword('');
 
     } catch (error) {
@@ -129,7 +133,7 @@ const MetaTrade = () => {
     }
   };
 
-  // ✅ Run Trading Cycle with proxy
+  // Run Trading Cycle - USING EXISTING /run-cycle ENDPOINT
   const handleRunTradingCycle = async () => {
     if (!connectionId || !serverName) {
       setTradingResults({ 
@@ -143,6 +147,7 @@ const MetaTrade = () => {
     setTradingResults(null);
 
     try {
+      // INTEGRATION: Using existing backend endpoint /run-cycle
       const response = await fetch(`${API_BASE_URL}/run-cycle?auto_trade=false`, {
         method: 'POST',
         headers: {
@@ -175,9 +180,10 @@ const MetaTrade = () => {
     }
   };
 
-  // ✅ Get Historical Signals with proxy
+  // Get Historical Signals - USING EXISTING /signals ENDPOINT
   const handleGetSignals = async () => {
     try {
+      // INTEGRATION: Using existing backend endpoint /signals
       const response = await fetch(`${API_BASE_URL}/signals?limit=10`);
       const result = await response.json();
       
@@ -196,6 +202,7 @@ const MetaTrade = () => {
     }
   };
 
+  // Clear results when form changes
   const clearResults = () => {
     setTestResult(null);
     setConnectionResult(null);
@@ -203,6 +210,7 @@ const MetaTrade = () => {
     setHistoricalSignals(null);
   };
 
+  // Check if we have a valid connection
   const hasValidConnection = localStorage.getItem('mt5_connection');
 
   return (

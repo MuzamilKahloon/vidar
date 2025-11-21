@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ThumbsUp, ThumbsDown, RefreshCw, X, TrendingUp, Activity, Target, Maximize2, Minimize2 } from 'lucide-react';
 
 const IA = () => {
-  // ✅ UPDATED: Use proxy endpoints
-  const API_BASE_URL = '/api/proxy';
-  const UPLOAD_BASE_URL = '/api/upload';
-  
+  // ✅ FIXED: Correct Backend URL
+  const API_BASE_URL = 'http://localhost:8000';
+//  const API_BASE_URL = '/api';
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -56,17 +55,17 @@ const IA = () => {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
-  // ✅ Health check with correct proxy URL
+  // ✅ FIXED: Better health check
   useEffect(() => {
     checkBackendStatus();
-    const interval = setInterval(checkBackendStatus, 30000); // Check every 30 seconds
+    const interval = setInterval(checkBackendStatus, 5000);
     return () => clearInterval(interval);
   }, []);
 
   const checkBackendStatus = async () => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
       
       const res = await fetch(`${API_BASE_URL}/health`, { 
         method: 'GET',
@@ -113,7 +112,7 @@ const IA = () => {
     }
   };
 
-  // ✅ Updated file upload with proper proxy
+  // ✅ FIXED: Proper file upload handler
   const handleFileUpload = async (files) => {
     if (files.length === 0) return;
     
@@ -123,8 +122,7 @@ const IA = () => {
       const formData = new FormData();
       files.forEach(file => formData.append('files', file));
 
-      // Use upload proxy endpoint
-      const uploadRes = await fetch(`${UPLOAD_BASE_URL}/context/learn_paths`, {
+      const uploadRes = await fetch(`${API_BASE_URL}/context/learn_paths`, {
         method: 'POST',
         body: formData
       });
@@ -147,7 +145,7 @@ const IA = () => {
       const uploadMsg = {
         id: Date.now(),
         type: 'bot',
-        text: `✅ Fichier(s) chargé(s) avec succès. Vous pouvez maintenant poser des questions.`,
+        text: `✅ Fichier(s) chargé(s) avec succès : ${result.files.join(', ')}. Vous pouvez maintenant poser des questions à leur sujet.`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -158,7 +156,7 @@ const IA = () => {
       const errorMsg = {
         id: Date.now(),
         type: 'bot',
-        text: `❌ Erreur lors du chargement: ${err.message}`,
+        text: `❌ Erreur lors du chargement du fichier: ${err.message}`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -180,7 +178,7 @@ const IA = () => {
     if (files.length > 0) handleFileUpload(files);
   };
 
-  // ✅ Updated API communication with proxy
+  // ✅ FIXED: Proper API communication
   const sendToAI = async (question, messageId = null) => {
     const endpoint = uploadedFiles.length > 0 ? '/chat/mixed' : '/chat';
 
@@ -210,7 +208,7 @@ const IA = () => {
           const errorData = await res.json();
           errorDetail = errorData.detail || errorData.message || errorDetail;
         } catch (e) {
-          console.log('Error parsing response:', e);
+          console.log(e)
         }
         throw new Error(errorDetail);
       }
@@ -238,9 +236,9 @@ const IA = () => {
       
       let errorMessage = err.message;
       if (err.name === 'AbortError') {
-        errorMessage = 'Timeout: Le serveur met trop de temps à répondre.';
+        errorMessage = 'Timeout: Le serveur met trop de temps à répondre. Assurez-vous que le backend fonctionne.';
       } else if (err.message.includes('Failed to fetch')) {
-        errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion.';
+        errorMessage = `Impossible de se connecter au serveur. Vérifiez que le backend fonctionne sur ${API_BASE_URL}`;
       }
 
       const errorMsg = {
@@ -334,6 +332,7 @@ const IA = () => {
   const removeFile = (index) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-black">
       {backendStatus === 'error' && (
