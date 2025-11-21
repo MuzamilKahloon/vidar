@@ -3,6 +3,9 @@
     "api/proxy/[...path].js": {
       "maxDuration": 30
     },
+    "api/proxy2/[...path].js": {
+      "maxDuration": 30
+    },
     "api/upload/[...path].js": {
       "maxDuration": 30
     }

@@ -15,8 +15,8 @@ const MetaTrade = () => {
   const [tradingResults, setTradingResults] = useState(null);
   const [historicalSignals, setHistoricalSignals] = useState(null);
 
-  // ✅ Updated to use proxy for second backend
-  const API_BASE_URL = '/api/proxy2';
+  // ✅ UPDATED: Use different proxy for second backend
+  const API_BASE_URL ='/api/proxy2';
 
   // Load saved connection on component mount
   useEffect(() => {
@@ -29,7 +29,7 @@ const MetaTrade = () => {
     }
   }, []);
 
-  // Test MT5 Connection - USING EXISTING /run-cycle ENDPOINT
+  // Test MT5 Connection
   const handleTestConnection = async () => {
     if (!connectionId || !password || !serverName) {
       setTestResult({ 
@@ -44,7 +44,6 @@ const MetaTrade = () => {
     setTestResult(null);
 
     try {
-      // Save credentials temporarily for testing
       const testCredentials = {
         login: connectionId,
         password: password,
@@ -71,7 +70,7 @@ const MetaTrade = () => {
     }
   };
 
-  // Connect MT5 Account - SAVE CREDENTIALS LOCALLY
+  // Connect MT5 Account
   const handleConnectAccount = async () => {
     if (!connectionId || !password || !serverName || !riskLevel) {
       setConnectionResult({ 
@@ -86,7 +85,6 @@ const MetaTrade = () => {
     setConnectionResult(null);
 
     try {
-      // Save connection details to localStorage
       const connectionData = {
         login: connectionId,
         server: serverName,
@@ -97,7 +95,6 @@ const MetaTrade = () => {
       
       localStorage.setItem('mt5_connection', JSON.stringify(connectionData));
 
-      // Update environment configuration
       const mt5Config = {
         MT5_LOGIN: connectionId,
         MT5_SERVER: serverName,
@@ -118,7 +115,6 @@ const MetaTrade = () => {
         }
       });
 
-      // Clear password for security
       setPassword('');
 
     } catch (error) {
@@ -133,7 +129,7 @@ const MetaTrade = () => {
     }
   };
 
-  // ✅ Updated Trading Cycle with proxy
+  // ✅ Run Trading Cycle with proxy
   const handleRunTradingCycle = async () => {
     if (!connectionId || !serverName) {
       setTradingResults({ 
@@ -179,7 +175,7 @@ const MetaTrade = () => {
     }
   };
 
-  // ✅ Updated Get Historical Signals with proxy
+  // ✅ Get Historical Signals with proxy
   const handleGetSignals = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/signals?limit=10`);
@@ -200,7 +196,6 @@ const MetaTrade = () => {
     }
   };
 
-  // Clear results when form changes
   const clearResults = () => {
     setTestResult(null);
     setConnectionResult(null);
@@ -208,10 +203,8 @@ const MetaTrade = () => {
     setHistoricalSignals(null);
   };
 
-  // Check if we have a valid connection
   const hasValidConnection = localStorage.getItem('mt5_connection');
 
-  // Rest of your component remains exactly the same
   return (
     <div className="min-h-screen w-full bg-black">
       {/* Main Content */}
@@ -534,40 +527,40 @@ const MetaTrade = () => {
                   </div>
                 </div>
 
-                {/* Historical Signals Display */}
-                {historicalSignals && (
-                  <div className="mt-4 p-3 rounded text-xs text-gray-300 bg-gray-800/50 border border-gray-700">
-                    <div className="font-semibold mb-3 text-cyan-300">Signaux Historiques</div>
-                    {historicalSignals.error ? (
-                      <div className="text-red-400">{historicalSignals.error}</div>
-                    ) : historicalSignals.items && historicalSignals.items.length > 0 ? (
-                      <div className="grid grid-cols-1 gap-2">
-                        {historicalSignals.items.map((signal, index) => (
-                          <div key={index} className="flex justify-between items-center p-2 rounded bg-black/30">
-                            <div>
-                              <span className="font-medium text-white">{signal.symbol}</span>
-                              <span className="text-gray-400 ml-2">Conf: {signal.confidence}%</span>
-                            </div>
-                            <div className="text-right">
-                              <span className={signal.signal === 'BUY' ? 'text-green-400 font-semibold' : 'text-red-400 font-semibold'}>
-                                {signal.signal}
-                              </span>
-                              <div className="text-gray-500 text-xs">
-                                {signal.timestamp}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-gray-500">Aucun signal historique trouvé</div>
-                    )}
-                  </div>
-                )}
+               {/* Historical Signals Display */}
+{historicalSignals && (
+  <div className="mt-4 p-3 rounded text-xs text-gray-300 bg-gray-800/50 border border-gray-700">
+    <div className="font-semibold mb-3 text-cyan-300">Signaux Historiques</div>
+    {historicalSignals.error ? (
+      <div className="text-red-400">{historicalSignals.error}</div>
+    ) : historicalSignals.items && historicalSignals.items.length > 0 ? (
+      <div className="grid grid-cols-1 gap-2">
+        {historicalSignals.items.map((signal, index) => (
+          <div key={index} className="flex justify-between items-center p-2 rounded bg-black/30">
+            <div>
+              <span className="font-medium text-white">{signal.symbol}</span>
+              <span className="text-gray-400 ml-2">Conf: {signal.confidence}%</span>
+            </div>
+            <div className="text-right">
+              <span className={signal.signal === 'BUY' ? 'text-green-400 font-semibold' : 'text-red-400 font-semibold'}>
+                {signal.signal}
+              </span>
+              <div className="text-gray-500 text-xs">
+                {signal.timestamp}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="text-gray-500">Aucun signal historique trouvé</div>
+    )}
+  </div>
+)}
               </div>
             </div>
 
-            {/* Right Section - Info Cards (keep exactly as is) */}
+            {/* Right Section - Info Cards */}
             <div className="space-y-3 sm:space-y-4">
               
               {/* Card 1 - Connected Account */}

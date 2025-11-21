@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ThumbsUp, ThumbsDown, RefreshCw, X, TrendingUp, Activity, Target, Maximize2, Minimize2 } from 'lucide-react';
 
 const IA = () => {
-  // ✅ Updated URLs for proxy endpoints
+  // ✅ UPDATED: Use proxy endpoints
   const API_BASE_URL = '/api/proxy';
   const UPLOAD_BASE_URL = '/api/upload';
   
@@ -56,7 +56,7 @@ const IA = () => {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
-  // ✅ Updated health check
+  // ✅ Health check with correct proxy URL
   useEffect(() => {
     checkBackendStatus();
     const interval = setInterval(checkBackendStatus, 30000); // Check every 30 seconds
@@ -113,7 +113,7 @@ const IA = () => {
     }
   };
 
-  // ✅ Updated file upload handler to use upload proxy
+  // ✅ Updated file upload with proper proxy
   const handleFileUpload = async (files) => {
     if (files.length === 0) return;
     
@@ -123,6 +123,7 @@ const IA = () => {
       const formData = new FormData();
       files.forEach(file => formData.append('files', file));
 
+      // Use upload proxy endpoint
       const uploadRes = await fetch(`${UPLOAD_BASE_URL}/context/learn_paths`, {
         method: 'POST',
         body: formData
@@ -146,7 +147,7 @@ const IA = () => {
       const uploadMsg = {
         id: Date.now(),
         type: 'bot',
-        text: `✅ Fichier(s) chargé(s) avec succès. Vous pouvez maintenant poser des questions à leur sujet.`,
+        text: `✅ Fichier(s) chargé(s) avec succès. Vous pouvez maintenant poser des questions.`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -157,7 +158,7 @@ const IA = () => {
       const errorMsg = {
         id: Date.now(),
         type: 'bot',
-        text: `❌ Erreur lors du chargement du fichier: ${err.message}`,
+        text: `❌ Erreur lors du chargement: ${err.message}`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -179,7 +180,7 @@ const IA = () => {
     if (files.length > 0) handleFileUpload(files);
   };
 
-  // ✅ Updated API communication using proxy
+  // ✅ Updated API communication with proxy
   const sendToAI = async (question, messageId = null) => {
     const endpoint = uploadedFiles.length > 0 ? '/chat/mixed' : '/chat';
 
@@ -209,7 +210,7 @@ const IA = () => {
           const errorData = await res.json();
           errorDetail = errorData.detail || errorData.message || errorDetail;
         } catch (e) {
-          console.log(e)
+          console.log('Error parsing response:', e);
         }
         throw new Error(errorDetail);
       }
@@ -237,15 +238,15 @@ const IA = () => {
       
       let errorMessage = err.message;
       if (err.name === 'AbortError') {
-        errorMessage = 'Timeout: Le serveur met trop de temps à répondre. Veuillez réessayer.';
+        errorMessage = 'Timeout: Le serveur met trop de temps à répondre.';
       } else if (err.message.includes('Failed to fetch')) {
-        errorMessage = 'Impossible de se connecter au serveur. Veuillez réessayer dans un moment.';
+        errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion.';
       }
 
       const errorMsg = {
         id: messageId || Date.now(),
         type: 'bot',
-        text: `❌ ${errorMessage}`,
+        text: `❌ Erreur: ${errorMessage}`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -333,17 +334,14 @@ const IA = () => {
   const removeFile = (index) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
-
-  // Rest of the component remains the same as your original code
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-black">
       {backendStatus === 'error' && (
         <div className="w-full bg-red-900/20 border-b border-red-500/30 px-4 py-2 z-50">
-          <p className="text-red-400 text-sm">⚠️ Backend temporairement indisponible. Veuillez réessayer dans un moment.</p>
+          <p className="text-red-400 text-sm">⚠️ Backend non connecté. Assurez-vous que le serveur fonctionne sur {API_BASE_URL}</p>
         </div>
       )}
 
-      {/* Rest of your JSX remains exactly the same */}
       <div className="lg:hidden w-full border-b border-gray-800 flex-shrink-0">
         <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
           <h3 className="text-white font-semibold text-sm sm:text-base">Dashboard Trading</h3>
