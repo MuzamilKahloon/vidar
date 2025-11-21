@@ -3,8 +3,8 @@ import { Send, FileText, ThumbsUp, ThumbsDown, RefreshCw, X, TrendingUp, Activit
 
 const IA = () => {
   // ✅ FIXED: Correct Backend URL
-  const API_BASE_URL = 'http://localhost:8000';
-
+  // const API_BASE_URL = 'http://localhost:8000';
+ const API_BASE_URL = '/api';
   const [messages, setMessages] = useState([
     {
       id: 1,

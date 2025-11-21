@@ -16,8 +16,8 @@ const MetaTrade = () => {
   const [historicalSignals, setHistoricalSignals] = useState(null);
 
   // API Base URL - adjust according to your backend
-  const API_BASE_URL = 'http://localhost:8000';
-
+  // const API_BASE_URL = 'http://localhost:8000';
+  const API_BASE_URL = '/api2';
   // Load saved connection on component mount
   useEffect(() => {
     const savedConnection = localStorage.getItem('mt5_connection');
