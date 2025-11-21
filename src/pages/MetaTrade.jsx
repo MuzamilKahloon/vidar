@@ -15,9 +15,9 @@ const MetaTrade = () => {
   const [tradingResults, setTradingResults] = useState(null);
   const [historicalSignals, setHistoricalSignals] = useState(null);
 
-  // API Base URL - adjust according to your backend
-  // const API_BASE_URL = 'http://localhost:8000';
-  const API_BASE_URL = '/api2';
+  // ✅ Updated to use proxy for second backend
+  const API_BASE_URL = '/api/proxy2';
+
   // Load saved connection on component mount
   useEffect(() => {
     const savedConnection = localStorage.getItem('mt5_connection');
@@ -133,7 +133,7 @@ const MetaTrade = () => {
     }
   };
 
-  // Run Trading Cycle - USING EXISTING /run-cycle ENDPOINT
+  // ✅ Updated Trading Cycle with proxy
   const handleRunTradingCycle = async () => {
     if (!connectionId || !serverName) {
       setTradingResults({ 
@@ -147,7 +147,6 @@ const MetaTrade = () => {
     setTradingResults(null);
 
     try {
-      // INTEGRATION: Using existing backend endpoint /run-cycle
       const response = await fetch(`${API_BASE_URL}/run-cycle?auto_trade=false`, {
         method: 'POST',
         headers: {
@@ -180,10 +179,9 @@ const MetaTrade = () => {
     }
   };
 
-  // Get Historical Signals - USING EXISTING /signals ENDPOINT
+  // ✅ Updated Get Historical Signals with proxy
   const handleGetSignals = async () => {
     try {
-      // INTEGRATION: Using existing backend endpoint /signals
       const response = await fetch(`${API_BASE_URL}/signals?limit=10`);
       const result = await response.json();
       
@@ -213,6 +211,7 @@ const MetaTrade = () => {
   // Check if we have a valid connection
   const hasValidConnection = localStorage.getItem('mt5_connection');
 
+  // Rest of your component remains exactly the same
   return (
     <div className="min-h-screen w-full bg-black">
       {/* Main Content */}
@@ -535,40 +534,40 @@ const MetaTrade = () => {
                   </div>
                 </div>
 
-               {/* Historical Signals Display */}
-{historicalSignals && (
-  <div className="mt-4 p-3 rounded text-xs text-gray-300 bg-gray-800/50 border border-gray-700">
-    <div className="font-semibold mb-3 text-cyan-300">Signaux Historiques</div>
-    {historicalSignals.error ? (
-      <div className="text-red-400">{historicalSignals.error}</div>
-    ) : historicalSignals.items && historicalSignals.items.length > 0 ? (
-      <div className="grid grid-cols-1 gap-2">
-        {historicalSignals.items.map((signal, index) => (
-          <div key={index} className="flex justify-between items-center p-2 rounded bg-black/30">
-            <div>
-              <span className="font-medium text-white">{signal.symbol}</span>
-              <span className="text-gray-400 ml-2">Conf: {signal.confidence}%</span>
-            </div>
-            <div className="text-right">
-              <span className={signal.signal === 'BUY' ? 'text-green-400 font-semibold' : 'text-red-400 font-semibold'}>
-                {signal.signal}
-              </span>
-              <div className="text-gray-500 text-xs">
-                {signal.timestamp}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div className="text-gray-500">Aucun signal historique trouvé</div>
-    )}
-  </div>
-)}
+                {/* Historical Signals Display */}
+                {historicalSignals && (
+                  <div className="mt-4 p-3 rounded text-xs text-gray-300 bg-gray-800/50 border border-gray-700">
+                    <div className="font-semibold mb-3 text-cyan-300">Signaux Historiques</div>
+                    {historicalSignals.error ? (
+                      <div className="text-red-400">{historicalSignals.error}</div>
+                    ) : historicalSignals.items && historicalSignals.items.length > 0 ? (
+                      <div className="grid grid-cols-1 gap-2">
+                        {historicalSignals.items.map((signal, index) => (
+                          <div key={index} className="flex justify-between items-center p-2 rounded bg-black/30">
+                            <div>
+                              <span className="font-medium text-white">{signal.symbol}</span>
+                              <span className="text-gray-400 ml-2">Conf: {signal.confidence}%</span>
+                            </div>
+                            <div className="text-right">
+                              <span className={signal.signal === 'BUY' ? 'text-green-400 font-semibold' : 'text-red-400 font-semibold'}>
+                                {signal.signal}
+                              </span>
+                              <div className="text-gray-500 text-xs">
+                                {signal.timestamp}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-gray-500">Aucun signal historique trouvé</div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Right Section - Info Cards */}
+            {/* Right Section - Info Cards (keep exactly as is) */}
             <div className="space-y-3 sm:space-y-4">
               
               {/* Card 1 - Connected Account */}

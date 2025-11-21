@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ThumbsUp, ThumbsDown, RefreshCw, X, TrendingUp, Activity, Target, Maximize2, Minimize2 } from 'lucide-react';
 
 const IA = () => {
-  // ✅ FIXED: Correct Backend URL
-  // const API_BASE_URL = 'http://localhost:8000';
- const API_BASE_URL = '/api';
+  // ✅ Updated URLs for proxy endpoints
+  const API_BASE_URL = '/api/proxy';
+  const UPLOAD_BASE_URL = '/api/upload';
+  
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -55,17 +56,17 @@ const IA = () => {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
-  // ✅ FIXED: Better health check
+  // ✅ Updated health check
   useEffect(() => {
     checkBackendStatus();
-    const interval = setInterval(checkBackendStatus, 5000);
+    const interval = setInterval(checkBackendStatus, 30000); // Check every 30 seconds
     return () => clearInterval(interval);
   }, []);
 
   const checkBackendStatus = async () => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
       
       const res = await fetch(`${API_BASE_URL}/health`, { 
         method: 'GET',
@@ -112,7 +113,7 @@ const IA = () => {
     }
   };
 
-  // ✅ FIXED: Proper file upload handler
+  // ✅ Updated file upload handler to use upload proxy
   const handleFileUpload = async (files) => {
     if (files.length === 0) return;
     
@@ -122,7 +123,7 @@ const IA = () => {
       const formData = new FormData();
       files.forEach(file => formData.append('files', file));
 
-      const uploadRes = await fetch(`${API_BASE_URL}/context/learn_paths`, {
+      const uploadRes = await fetch(`${UPLOAD_BASE_URL}/context/learn_paths`, {
         method: 'POST',
         body: formData
       });
@@ -145,7 +146,7 @@ const IA = () => {
       const uploadMsg = {
         id: Date.now(),
         type: 'bot',
-        text: `✅ Fichier(s) chargé(s) avec succès : ${result.files.join(', ')}. Vous pouvez maintenant poser des questions à leur sujet.`,
+        text: `✅ Fichier(s) chargé(s) avec succès. Vous pouvez maintenant poser des questions à leur sujet.`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -178,7 +179,7 @@ const IA = () => {
     if (files.length > 0) handleFileUpload(files);
   };
 
-  // ✅ FIXED: Proper API communication
+  // ✅ Updated API communication using proxy
   const sendToAI = async (question, messageId = null) => {
     const endpoint = uploadedFiles.length > 0 ? '/chat/mixed' : '/chat';
 
@@ -208,7 +209,7 @@ const IA = () => {
           const errorData = await res.json();
           errorDetail = errorData.detail || errorData.message || errorDetail;
         } catch (e) {
-          // Response wasn't JSON
+          console.log(e)
         }
         throw new Error(errorDetail);
       }
@@ -236,15 +237,15 @@ const IA = () => {
       
       let errorMessage = err.message;
       if (err.name === 'AbortError') {
-        errorMessage = 'Timeout: Le serveur met trop de temps à répondre. Assurez-vous que le backend fonctionne.';
+        errorMessage = 'Timeout: Le serveur met trop de temps à répondre. Veuillez réessayer.';
       } else if (err.message.includes('Failed to fetch')) {
-        errorMessage = `Impossible de se connecter au serveur. Vérifiez que le backend fonctionne sur ${API_BASE_URL}`;
+        errorMessage = 'Impossible de se connecter au serveur. Veuillez réessayer dans un moment.';
       }
 
       const errorMsg = {
         id: messageId || Date.now(),
         type: 'bot',
-        text: `❌ Erreur: ${errorMessage}`,
+        text: `❌ ${errorMessage}`,
         time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         analysis: null
       };
@@ -333,14 +334,16 @@ const IA = () => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Rest of the component remains the same as your original code
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-black">
       {backendStatus === 'error' && (
         <div className="w-full bg-red-900/20 border-b border-red-500/30 px-4 py-2 z-50">
-          <p className="text-red-400 text-sm">⚠️ Backend non connecté. Assurez-vous que le serveur fonctionne sur {API_BASE_URL}</p>
+          <p className="text-red-400 text-sm">⚠️ Backend temporairement indisponible. Veuillez réessayer dans un moment.</p>
         </div>
       )}
 
+      {/* Rest of your JSX remains exactly the same */}
       <div className="lg:hidden w-full border-b border-gray-800 flex-shrink-0">
         <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
           <h3 className="text-white font-semibold text-sm sm:text-base">Dashboard Trading</h3>
