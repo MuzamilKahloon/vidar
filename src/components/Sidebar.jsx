@@ -58,10 +58,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-medium"
               style={{ background: 'linear-gradient(343deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)' }}
             >
-              JD
+              PV
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">John Doe</p>
+              <p className="text-white text-sm font-medium truncate">Pizzulo Valentin</p>
               <p className="text-gray-300 text-xs truncate">comment@gyt.r</p>
             </div>
             <div className="w-2 h-2 rounded-full bg-green-500"></div>

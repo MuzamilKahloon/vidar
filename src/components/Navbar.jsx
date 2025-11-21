@@ -63,7 +63,7 @@ const Navbar = () => {
           </button>
 
           {/* Notifications */}
-          <button className="relative p-1.5 sm:p-2 rounded-lg transition-all hover:opacity-90 flex-shrink-0">
+          {/* <button className="relative p-1.5 sm:p-2 rounded-lg transition-all hover:opacity-90 flex-shrink-0">
             <svg
               width="18"
               height="18"
@@ -82,10 +82,10 @@ const Navbar = () => {
                 background: "linear-gradient(45deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)",
               }}
             ></span>
-          </button>
+          </button> */}
 
           {/* Settings */}
-          <button className="p-1.5 sm:p-2 rounded-full transition-all hover:opacity-90 flex-shrink-0">
+          {/* <button className="p-1.5 sm:p-2 rounded-full transition-all hover:opacity-90 flex-shrink-0">
             <svg
               width="18"
               height="18"
@@ -98,10 +98,10 @@ const Navbar = () => {
                 fill="currentColor"
               />
             </svg>
-          </button>
+          </button> */}
 
           {/* User Profile */}
-          <button
+          {/* <button
             className="p-1.5 sm:p-2 rounded-full transition-all hover:scale-105 shadow-md flex-shrink-0"
             style={{
               background: "linear-gradient(90deg, rgba(0, 26, 40, 1) 0%, rgba(0, 115, 182, 1) 100%)",
@@ -119,7 +119,7 @@ const Navbar = () => {
                 fill="currentColor"
               />
             </svg>
-          </button>
+          </button> */}
         </div>
       </div>
 
