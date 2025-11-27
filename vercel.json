@@ -1,13 +1,6 @@
 {
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "http://31.220.76.227:8001/$1"
-    },
-    {
-      "source": "/api2/(.*)",
-      "destination": "http://31.220.76.227:8002/$1"
-    },
+    
     {
       "source": "/(.*)",
       "destination": "/index.html"
