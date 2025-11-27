@@ -3,7 +3,7 @@ import { Send, FileText, ThumbsUp, ThumbsDown, RefreshCw, X, TrendingUp, Activit
 
 const IA = () => {
   // ✅ FIXED: Correct Backend URL
-  const API_BASE_URL = 'https://vidar-ai.com/';
+  const API_BASE_URL = 'https://api.vidar-ai.com';
 //  const API_BASE_URL = '/api';
   const [messages, setMessages] = useState([
     {

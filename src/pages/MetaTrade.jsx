@@ -17,7 +17,7 @@ const MetaTrade = () => {
 
   // API Base URL - adjust according to your backend
   // const API_BASE_URL = 'http://localhost:8000';
-  const API_BASE_URL = 'https://api.vidar-ai.com/';
+  const API_BASE_URL = 'https://vidar-ai.com';
   // Load saved connection on component mount
   useEffect(() => {
     const savedConnection = localStorage.getItem('mt5_connection');
